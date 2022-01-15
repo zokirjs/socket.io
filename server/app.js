@@ -7,7 +7,8 @@ const socketIO = require('socket.io');
 const http = require('http');
 let server = http.createServer(app);
 let io = socketIO(server);
-
+const db = require('./db');
+const { redirect } = require('express/lib/response');
 
 // configs
 app.use(express.static('public'));
@@ -25,7 +26,12 @@ app.use('/room', require('./routes/room'));
 
 io.on('connection', (socket) => {
     socket.on('join', (msg)=> {
-        console.log(msg);
+        let user = db.find(e => e.username == msg);
+        if (user) {
+            socket.emit('old username', 'Username is allready used');
+        }else {
+            io.emit('redirect', '/room');
+        } 
     });
     socket.on('sendMessage', (msg) => {
         console.log(msg);

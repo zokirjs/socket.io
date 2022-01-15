@@ -8,7 +8,7 @@
   </head>
   <body class="centered-form">
     <div class="centered-form__form">
-      <form id="message-form" action="/chat.html">
+      <form id="message-form" action="/room">
         <div class="form-field"><h3>Join Chat</h3></div>
         <div class="form-field">
           <label>Display name</label>
@@ -26,6 +26,10 @@
       var socket = io();
 
       var form = document.getElementById('message-form');
+
+      socket.on('redirect', function(url) {
+        window.location.href = url;
+      });
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
