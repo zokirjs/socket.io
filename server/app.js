@@ -20,9 +20,8 @@ app.set('view engine', 'html');
 
 
 // routes
-app.get('/', (req, res) => {
-    res.render('chat');
-});
+app.use('/', require('./routes/index'));
+app.use('/room', require('./routes/room'));
 
 io.on('connection', (socket) => {
     socket.on('join', (msg)=> {
