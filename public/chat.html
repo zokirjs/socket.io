@@ -50,8 +50,21 @@
     </script>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/js/chat.js"></script>
-    <script type="text/javascript" src="/js/libs/moment.js"></script>
-    <script type="text/javascript" src="/js/libs/mustache.js"></script>
+    <script>
+      var socket = io();
+
+      var form = document.getElementById('message-form');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        var message = form.message.value;
+
+        if (message.length > 0) {
+          socket.emit('sendMessage', message);
+          form.message.value = '';
+        }
+      });
+
+    </script>
   </body>
 </html>

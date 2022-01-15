@@ -8,15 +8,11 @@
   </head>
   <body class="centered-form">
     <div class="centered-form__form">
-      <form action="/chat.html">
+      <form id="message-form" action="/chat.html">
         <div class="form-field"><h3>Join Chat</h3></div>
         <div class="form-field">
           <label>Display name</label>
-          <input type="text" name="name" autofocus>
-        </div>
-        <div class="form-field">
-          <label>Room name</label>
-          <input type="text" name="room" autofocus>
+          <input type="text" name="username" autofocus>
         </div>
         <div class="form-field">
           <button>Join</button>
@@ -24,5 +20,22 @@
       </form>
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+      var socket = io();
+
+      var form = document.getElementById('message-form');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        var uname = form.username.value;
+        if (uname.length > 0) {
+          socket.emit('join', uname);
+        }
+        form.username.value = ''
+      });
+
+    </script>
   </body>
 </html>

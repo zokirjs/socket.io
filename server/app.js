@@ -1,16 +1,41 @@
 const express = require('express');
-const app = express();
+let app = express();
 const dotenv = require('dotenv');
-const port = process.env.PORT || 3000;
 dotenv.config();
+const port = process.env.PORT || 3000;
+const socketIO = require('socket.io');
+const http = require('http');
+let server = http.createServer(app);
+let io = socketIO(server);
 
+
+// configs
 app.use(express.static('public'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
+
+// routes
+app.get('/', (req, res) => {
+    res.render('chat');
+});
+
+io.on('connection', (socket) => {
+    socket.on('join', (msg)=> {
+        console.log(msg);
+    });
+    socket.on('sendMessage', (msg) => {
+        console.log(msg);
+    });
+});
 
 
 
-
-
-app.listen(port, () => {console.log(`Server is running on port ${port}`)}); 
-
+// run server
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
+});
